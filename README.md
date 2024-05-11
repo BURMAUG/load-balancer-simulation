@@ -20,4 +20,4 @@ running instances for our radius calculating server.
 - Threads using Runnable interface
 
 ### Author
-[!https://github.com/BURMAUG?tab=repositories](Burmau Garba)
+[https://github.com/BURMAUG?tab=repositories](Burmau Garba)
