@@ -5,13 +5,22 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ClientHandler extends Thread {
+    private final Lock lock = new ReentrantLock();
+    private Client clientAddr;
+
+    public ClientHandler(Client clientAddr) {
+        this.clientAddr = clientAddr;
+    }
 
     @Override
     public void run() {
-        for (int i = 0; i < 10_000; i++){
-            try(Socket client = new Socket("localhost", 2000)){
+        for (int i = 0; i < 1_000; i++){
+            lock.lock();
+            try(Socket client = new Socket(clientAddr.getHOST(), clientAddr.getLOAD_BALANCER_PORT())){
                 DataInputStream receivePort = new DataInputStream(client.getInputStream());
                 int serverPort = receivePort.readInt();
                 System.out.println(STR."\{serverPort}");
@@ -20,7 +29,7 @@ public class ClientHandler extends Thread {
                     double diameter = genDiameter();
                     dataOutputStream.writeDouble(diameter);
 
-                    // Answer
+                    // Radius of the given circles diameter
                     DataInputStream radiusInputStream = new DataInputStream(ss.getInputStream());
                     System.out.println(STR."\{i+1}. The diameter of a circle \{diameter} has a radius \{radiusInputStream.readDouble()}");
                     Thread.sleep(0);
@@ -30,6 +39,7 @@ public class ClientHandler extends Thread {
             } catch (IOException e) {
                 System.out.println(STR."Error from ClientHandler \{e.getMessage()}");
             }
+            lock.unlock();
         }
     }
 

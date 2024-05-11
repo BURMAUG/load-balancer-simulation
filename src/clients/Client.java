@@ -13,5 +13,11 @@ public class Client{
         return clientName;
     }
 
+    public String getHOST() {
+        return HOST;
+    }
 
+    public Integer getLOAD_BALANCER_PORT() {
+        return LOAD_BALANCER_PORT;
+    }
 }
