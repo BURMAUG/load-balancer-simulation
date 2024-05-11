@@ -2,7 +2,7 @@
 
 ### Introduction
 This is a simulations of the implementation of the software Load Balancer that routes TCP network calls to different
-running instances for our radius calculating server. 
+running instances for our radius calculating server in a multithreaded manner.
 
 ### Enhancements Coming
 - Round-Robin routing
