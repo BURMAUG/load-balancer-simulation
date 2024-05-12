@@ -35,15 +35,4 @@ public class LoadBalancers implements Runnable{
             }
         }
     }
-
-//    public static void main(String[] args) {
-//        ArrayList<Server> servers = new ArrayList<>(Arrays.asList(
-//                new Server(1000),
-//                new Server(5000),
-//                new Server(3000)));
-//        new Thread(new LoadBalancers(servers)).start();
-//        for (Server server : servers)
-//            new Thread(new ServerHandler(server)).start();
-//
-//    }
 }

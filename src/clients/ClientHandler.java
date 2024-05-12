@@ -10,10 +10,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ClientHandler extends Thread {
     private final Lock lock = new ReentrantLock();
-    private Client clientAddr;
+    private final Client clientAddr;
 
     public ClientHandler(Client clientAddr) {
         this.clientAddr = clientAddr;
+    }
+
+    private double genDiameter() {
+        return new Random().nextDouble();
     }
 
     @Override
@@ -32,7 +36,7 @@ public class ClientHandler extends Thread {
                     // Radius of the given circles diameter
                     DataInputStream radiusInputStream = new DataInputStream(ss.getInputStream());
                     System.out.println(STR."\{i+1}. The diameter of a circle \{diameter} has a radius \{radiusInputStream.readDouble()}");
-                    Thread.sleep(0);
+                    Thread.sleep(2);
                 } catch (InterruptedException _) {
 
                 }
@@ -41,9 +45,5 @@ public class ClientHandler extends Thread {
             }
             lock.unlock();
         }
-    }
-
-    private double genDiameter() {
-        return new Random().nextDouble();
     }
 }
