@@ -22,7 +22,7 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < 1_000; i++){
+        for (int i = 0; i < 5_000; i++){
             lock.lock();
             try(Socket client = new Socket(clientAddr.getHOST(), clientAddr.getLOAD_BALANCER_PORT())){
                 DataInputStream receivePort = new DataInputStream(client.getInputStream());

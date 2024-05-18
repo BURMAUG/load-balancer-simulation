@@ -20,9 +20,7 @@ public static void main(String[] args) {
     service.submit(new ClientHandler(new Client("sa")));
     service.submit(new ClientHandler(new Client("dsd")));
     service.shutdown();
-    while (!service.isTerminated())
-    {}
-//    new Thread(new LoadBalancers(servers)).start();
-//    for (Server server : servers)
-//        new Thread(new ServerHandler(server)).start();
+
+    //    while (!service.isTerminated())
+//    {}
 }

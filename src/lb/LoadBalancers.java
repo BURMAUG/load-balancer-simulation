@@ -1,14 +1,12 @@
 package lb;
 
 import servers.Server;
-import servers.ServerHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class LoadBalancers implements Runnable{
@@ -24,7 +22,7 @@ public class LoadBalancers implements Runnable{
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()){
-            try(ServerSocket lb = new ServerSocket(2000)) {
+            try(ServerSocket lb = new ServerSocket(2000, 1000)) {
                 Socket socket = lb.accept();
                 // Transfer one server port to a given client
                 DataOutputStream serverPort  = new DataOutputStream(socket.getOutputStream());

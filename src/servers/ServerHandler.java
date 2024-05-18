@@ -20,11 +20,14 @@ public class ServerHandler implements Runnable{
     public void run() {
         while (!Thread.currentThread().isInterrupted()){
             lock.lock();
-            try(ServerSocket socket = new ServerSocket(server.getPort())){
+            try(ServerSocket socket = new ServerSocket(server.getPort(), 1000)){
                 Socket client = socket.accept();
                 server.calculateRadiusBasedOnGivenDiameterOfCircle( new DataInputStream(client.getInputStream()), client);
+                Thread.sleep(2);
             } catch (IOException e) {
                 System.out.println(STR."Error \{e.getMessage()}");
+            } catch (InterruptedException e) {
+                System.out.println(e.getLocalizedMessage());
             }
             lock.unlock();
         }
