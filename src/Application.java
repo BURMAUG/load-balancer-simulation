@@ -20,7 +20,4 @@ public static void main(String[] args) {
     service.submit(new ClientHandler(new Client("sa")));
     service.submit(new ClientHandler(new Client("dsd")));
     service.shutdown();
-
-    //    while (!service.isTerminated())
-//    {}
 }
