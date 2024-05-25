@@ -1,26 +1,23 @@
 package servers;
 
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
 
 public class Server {
+    private String serverName;
     private int port;
+    private BlockingQueue<Socket> socketBlockingQueue;
+
+    // Metrics
+    private int failureRate; // in percentages
+    private int successRate;
+    private long totalResponseTime;
+    private long averageResponseTime;
+    private int currentQueueCapacity;
+    private boolean isHealthy; // if working queue is less than 70% then it's in good health
 
     public Server(int port) {
         this.port = port;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-
-    public void calculateRadiusBasedOnGivenDiameterOfCircle(DataInputStream dataInputStream, Socket client) throws IOException {
-        double d = dataInputStream.readDouble();
-        DataOutputStream outputStream = new DataOutputStream(client.getOutputStream());
-        outputStream.writeDouble(d / 2);
     }
 }

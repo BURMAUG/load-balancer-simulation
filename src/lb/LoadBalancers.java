@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Random;
 
 public class LoadBalancers implements Runnable{
     private ArrayList<Server> servers;
+    private Properties properties;
+
 
     public LoadBalancers(ArrayList<Server> servers) {
         this.servers = servers;
