@@ -12,5 +12,8 @@ public class ServerHandler implements Runnable{
 
     @Override
     public void run() {
+        while (!Thread.currentThread().isInterrupted()){
+            continue;
+        }
     }
 }
