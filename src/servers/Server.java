@@ -1,6 +1,7 @@
 package servers;
 
 
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
@@ -8,6 +9,7 @@ public class Server {
     private String serverName;
     private int port;
     private BlockingQueue<Socket> socketBlockingQueue;
+    private ServerSocket serverSocket;
 
     // Metrics
     private int failureRate; // in percentages
