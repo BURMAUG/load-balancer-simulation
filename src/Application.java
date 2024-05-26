@@ -18,10 +18,13 @@ public static void main(String[] args) throws IOException{
     Property property = new Property(new Properties());
     ArrayList<Server> servers = property.prepareServers();
     Client client =new Client("Burmau");
+    Client client2 =new Client("Ashiliuren");
     ClientHandler clientHandler = new ClientHandler(client);
+    ClientHandler clientHandler2 = new ClientHandler(client2);
     LoadBalancers loadBalancers = new LoadBalancers(servers, property);
     service.submit(loadBalancers);
     service.submit(clientHandler);
+    service.submit(clientHandler2);
     for (Server server : servers){
         service.submit(new ServerHandler(server, new Socket(client.getHOST(), client.getLOAD_BALANCER_PORT())));
     }

@@ -1,8 +1,6 @@
 package servers;
 
 
-import lb.LoadBalancers;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -48,6 +46,7 @@ public class Server {
     public ServerSocket getServerSocket() throws IOException {
         return serverSocket;
     }
+
     public boolean isHealthy() {
         if( (double) socketBlockingQueue.remainingCapacity() / socketBlockingQueue.size() > .7){
             isHealthy = true;
@@ -85,5 +84,4 @@ public class Server {
         lock.unlock();
         return socket;
     }
-
 }

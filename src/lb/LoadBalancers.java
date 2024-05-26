@@ -12,7 +12,7 @@ public class LoadBalancers implements Runnable{
     private ArrayList<Server> servers;
     private final Properties properties = new Properties();
     private Property property;
-    // I am  thinking i should also have a queue here too like 15 socket
+    // I am  thinking i shouldld also have a queue here too like 15 socket
 
     public LoadBalancers(Property property){
         this.property = new Property(properties);

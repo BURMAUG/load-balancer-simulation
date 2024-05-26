@@ -1,5 +1,6 @@
 package servers;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -26,8 +27,9 @@ public class ServerHandler implements Runnable{
                 ServerSocket serverSocket =  server.getServerSocket();
                 socket = serverSocket.accept();
                 server.addSocket(socket);
+                DataInputStream inputStream = new DataInputStream(socket.getInputStream());
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-                outputStream.writeDouble(32.3);
+                outputStream.writeDouble(inputStream.readDouble() /2);
                 System.out.println("here");
                 System.out.println(server.isHealthy());
                 Socket socket1 = server.takeSocket();
