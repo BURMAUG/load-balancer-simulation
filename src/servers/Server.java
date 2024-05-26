@@ -3,17 +3,25 @@ package servers;
 
 import lb.LoadBalancers;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Server {
     private String serverName;
     private int serverID;
     private int port;
-    private final BlockingQueue<Socket> socketBlockingQueue = new LinkedBlockingQueue<>(5); //for each server
-    private LoadBalancers loadBalancers; // has access to the props file and i need it to give ports here
+    private ServerSocket serverSocket;
+    private Lock lock = new ReentrantLock();
+    private BlockingQueue<Socket> socketBlockingQueue;
+    private  static double circle;
+    private Condition condition = lock.newCondition();
 
     // Metrics
     private int failureRate; // in percentages
@@ -26,17 +34,56 @@ public class Server {
     public Server(int port) {
         this.port = port;
         serverID = new Random().nextInt(21, 999) + 21;
+        socketBlockingQueue = new LinkedBlockingQueue<>(5);
     }
 
-    public Server(String serverName, LoadBalancers loadBalancers) {
+    public Server(int serverID, String serverName, int port) throws IOException {
+        this.serverID = serverID;
         this.serverName = serverName;
-        this.loadBalancers = loadBalancers;
-        serverID = new Random().nextInt(21, 999) + 21;
+        this.port =  port;
+        this.socketBlockingQueue = new LinkedBlockingQueue<>(5);
+        this.serverSocket = new ServerSocket(port);
     }
 
-    public void messageController(){
-
+    public ServerSocket getServerSocket() throws IOException {
+        return serverSocket;
+    }
+    public boolean isHealthy() {
+        if( (double) socketBlockingQueue.remainingCapacity() / socketBlockingQueue.size() > .7){
+            isHealthy = true;
+            System.out.println(STR."Health is \{ (double) socketBlockingQueue.remainingCapacity() / socketBlockingQueue.size() }");
+            return isHealthy;
+        }
+        isHealthy = false;
+        System.out.println(STR."Health is \{socketBlockingQueue.remainingCapacity() / socketBlockingQueue.size()}");
+        return isHealthy;
     }
 
+    public void addSocket(Socket socket) throws InterruptedException {
+            lock.lock();
+            try {
+                while (!isHealthy()) {
+                    System.out.println("Unhealthy tracffic");
+                    condition.await();
+                }
+                socketBlockingQueue.add(socket);
+            }catch (InterruptedException e){
+                System.out.println(e.getLocalizedMessage());
+            }
+            lock.unlock();
+    }
+
+    public Socket takeSocket() throws InterruptedException {
+        lock.lock();
+        Socket socket = null;
+        try{
+            socket = socketBlockingQueue.take();
+             condition.signalAll();
+        }catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+        lock.unlock();
+        return socket;
+    }
 
 }
