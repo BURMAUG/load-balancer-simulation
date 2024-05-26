@@ -14,7 +14,7 @@ public class LoadBalancers implements Runnable{
     private Property property;
     // I am  thinking i should also have a queue here too like 15 socket
 
-    public LoadBalancers(){
+    public LoadBalancers(Property property){
         this.property = new Property(properties);
     }
 

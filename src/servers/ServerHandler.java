@@ -10,7 +10,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ServerHandler implements Runnable{
     private final Server server;
     private Socket socket; // should come from lb
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
+
+    // Constructors
     public ServerHandler(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
