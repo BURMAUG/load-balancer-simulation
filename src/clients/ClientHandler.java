@@ -27,7 +27,7 @@ public class ClientHandler extends Thread {
             try(Socket client = new Socket(clientAddr.getHOST(), clientAddr.getLOAD_BALANCER_PORT())){
                 DataInputStream receivePort = new DataInputStream(client.getInputStream());
                 int serverPort = receivePort.readInt();
-                System.out.println(STR."\{serverPort}");
+                System.out.println(STR."Receiverd port \{serverPort}");
                 try(Socket ss = new Socket("localhost", serverPort)){
                     DataOutputStream dataOutputStream = new DataOutputStream(ss.getOutputStream());
                     double diameter = genDiameter();

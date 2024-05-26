@@ -7,6 +7,6 @@ public record Client(String clientName) {
     }
 
     public Integer getLOAD_BALANCER_PORT() {
-        return 2000;
+        return 1000;
     }
 }
