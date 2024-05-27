@@ -31,9 +31,11 @@ public class ServerHandler implements Runnable{
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
                 outputStream.writeDouble(inputStream.readDouble() /2);
                 System.out.println("here");
-                System.out.println(server.isHealthy());
+                System.out.println(STR."+++++++\{server.isHealthy()}");
+
                 Socket socket1 = server.takeSocket();
                 socket1.close();
+                System.out.println();
             } catch (IOException e) {
                 System.out.println(STR."ServerHandler \{e.getMessage()}");
             } catch (InterruptedException e) {

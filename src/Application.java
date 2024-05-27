@@ -20,15 +20,17 @@ public static void main(String[] args) throws IOException{
     Property property = new Property(new Properties());
     ArrayList<Server> servers = property.prepareServers();
     Client client =new Client("Burmau");
-    Client client2 =new Client("Ashiliuren");
     ClientHandler clientHandler = new ClientHandler(client);
-    ClientHandler clientHandler2 = new ClientHandler(client2);
     LoadBalancers loadBalancers = new LoadBalancers(servers, property);
     service.submit(loadBalancers);
     service.submit(clientHandler);
-    service.submit(clientHandler2);
     for (Server server : servers){
         service.submit(new ServerHandler(server, new Socket(client.getHOST(), client.getLOAD_BALANCER_PORT())));
     }
     service.shutdown();
+    LinkedBlockingQueue<Integer> s = new LinkedBlockingQueue<>(5);
+    s.add(23);
+    s.add(23);
+    System.out.println(s.size());
+    System.out.println( (double) s.size() / (s.size() + s.remainingCapacity()));
 }

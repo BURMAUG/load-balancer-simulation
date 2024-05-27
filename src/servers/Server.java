@@ -27,7 +27,7 @@ public class Server {
     private long totalResponseTime;
     private long averageResponseTime;
     private int currentQueueCapacity;
-    private boolean isHealthy; // if working queue is less than 70% then it's in good health
+    private static boolean isHealthy = true; // if working queue is less than 70% then it's in good health
 
     public Server(int port) {
         this.port = port;
@@ -43,28 +43,32 @@ public class Server {
         this.serverSocket = new ServerSocket(port);
     }
 
-    public ServerSocket getServerSocket() throws IOException {
+    public synchronized ServerSocket getServerSocket() throws IOException {
         return serverSocket;
     }
 
-    public boolean isHealthy() {
+    public synchronized boolean isHealthy() {
         lock.lock();
-        if((double) socketBlockingQueue.size() /(socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity()) > 0.6){
-            isHealthy = false;
+        if((double) socketBlockingQueue.size() /(socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity()) > 0.4){
+            isHealthy = !isHealthy;
+            System.out.println("IN!!!!!");
             System.out.println(STR."Health is \{(double) socketBlockingQueue.size() /( socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity())}");
             return isHealthy;
         }
         isHealthy = true;
+        System.out.println("Out!!!!");
         System.out.println(STR."Health is \{socketBlockingQueue.size() /  (socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity())}");
         lock.unlock();
         return isHealthy;
 
     }
 
-    public void addSocket(Socket socket) throws InterruptedException {
+    public synchronized void addSocket(Socket socket) throws InterruptedException {
             lock.lock();
             try {
-                while (!isHealthy()) {
+                System.out.println(isHealthy);
+                while (!isHealthy) {
+                    System.out.println(isHealthy);
                     System.out.println("Unhealthy traffic");
                     condition.await();
                 }
@@ -75,7 +79,7 @@ public class Server {
             lock.unlock();
     }
 
-    public Socket takeSocket() throws InterruptedException {
+    public synchronized Socket takeSocket() throws InterruptedException {
         lock.lock();
         Socket socket = null;
         try{
