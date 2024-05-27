@@ -48,21 +48,24 @@ public class Server {
     }
 
     public boolean isHealthy() {
-        if( (double) socketBlockingQueue.remainingCapacity() / socketBlockingQueue.size() > .7){
-            isHealthy = true;
-            System.out.println(STR."Health is \{ (double) socketBlockingQueue.remainingCapacity() / socketBlockingQueue.size() }");
+        lock.lock();
+        if((double) socketBlockingQueue.size() /(socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity()) > 0.6){
+            isHealthy = false;
+            System.out.println(STR."Health is \{(double) socketBlockingQueue.size() /( socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity())}");
             return isHealthy;
         }
-        isHealthy = false;
-        System.out.println(STR."Health is \{socketBlockingQueue.remainingCapacity() / socketBlockingQueue.size()}");
+        isHealthy = true;
+        System.out.println(STR."Health is \{socketBlockingQueue.size() /  (socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity())}");
+        lock.unlock();
         return isHealthy;
+
     }
 
     public void addSocket(Socket socket) throws InterruptedException {
             lock.lock();
             try {
                 while (!isHealthy()) {
-                    System.out.println("Unhealthy tracffic");
+                    System.out.println("Unhealthy traffic");
                     condition.await();
                 }
                 socketBlockingQueue.add(socket);
@@ -77,7 +80,7 @@ public class Server {
         Socket socket = null;
         try{
             socket = socketBlockingQueue.take();
-             condition.signalAll();
+            condition.signalAll();
         }catch (InterruptedException e){
             System.out.println(e.getMessage());
         }
