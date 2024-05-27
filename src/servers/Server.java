@@ -18,7 +18,6 @@ public class Server {
     private ServerSocket serverSocket;
     private Lock lock = new ReentrantLock();
     private BlockingQueue<Socket> socketBlockingQueue;
-    private  static double circle;
     private Condition condition = lock.newCondition();
 
     // Metrics
@@ -47,7 +46,7 @@ public class Server {
         return serverSocket;
     }
 
-    public synchronized boolean isHealthy() {
+    public boolean isHealthy() {
         lock.lock();
         if((double) socketBlockingQueue.size() /(socketBlockingQueue.size() + socketBlockingQueue.remainingCapacity()) > 0.4){
             isHealthy = !isHealthy;
@@ -63,8 +62,8 @@ public class Server {
 
     }
 
-    public synchronized void addSocket(Socket socket) throws InterruptedException {
-            lock.lock();
+    public void addSocket(Socket socket) throws InterruptedException {
+//            lock.lock();
             try {
                 System.out.println(isHealthy);
                 while (!isHealthy) {
@@ -72,14 +71,16 @@ public class Server {
                     System.out.println("Unhealthy traffic");
                     condition.await();
                 }
+                Thread.sleep(2000);
+//                System.out.println("addddd" +socketBlockingQueue.remainingCapacity());
                 socketBlockingQueue.add(socket);
             }catch (InterruptedException e){
                 System.out.println(e.getLocalizedMessage());
             }
-            lock.unlock();
+//            lock.unlock();
     }
 
-    public synchronized Socket takeSocket() throws InterruptedException {
+    public Socket takeSocket() throws InterruptedException {
         lock.lock();
         Socket socket = null;
         try{

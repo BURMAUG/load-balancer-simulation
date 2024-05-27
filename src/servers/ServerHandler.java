@@ -26,7 +26,7 @@ public class ServerHandler implements Runnable{
             try{
                 ServerSocket serverSocket =  server.getServerSocket();
                 socket = serverSocket.accept();
-                server.addSocket(socket);
+                server.addSocket(socket); // what should be here
                 DataInputStream inputStream = new DataInputStream(socket.getInputStream());
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
                 outputStream.writeDouble(inputStream.readDouble() /2);
