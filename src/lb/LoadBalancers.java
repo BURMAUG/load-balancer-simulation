@@ -25,15 +25,13 @@ public class LoadBalancers implements Runnable{
         cur = servers.getHead();
     }
 
-
-
     public synchronized Server roundRobinRouting() {
-        if (cur.getNext() != null){
-            return cur.getServer();
-        }
-        cur = servers.getHead();
-        System.out.println("Not Null");
-        return cur.getServer(); // I feel like problems may arise here.
+        if(cur.getNext() == null)
+            cur = servers.getHead();
+        LinkedList.Node c = cur;
+        cur = cur.getNext();
+
+        return c.getServer();
     }
 
     public synchronized void stickyRoundRobingRouting(){
@@ -57,7 +55,7 @@ public class LoadBalancers implements Runnable{
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         while (!Thread.currentThread().isInterrupted()){
             try(ServerSocket balancerServer = new ServerSocket(property.getLoadBalancerPort())){
                 Socket socket = balancerServer.accept();
@@ -66,6 +64,7 @@ public class LoadBalancers implements Runnable{
                 outputStream.writeInt(server.getServerSocket().getLocalPort());
                 System.out.println(STR."sent \{server.getServerSocket().getLocalPort()}");
                 System.out.println(STR."Server Details \{server.toString()}");
+                System.out.println();
             } catch (IOException _) {
             }
         }

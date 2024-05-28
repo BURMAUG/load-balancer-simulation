@@ -8,26 +8,25 @@ import servers.ServerHandler;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+;
 
-public static void main() throws IOException {
+public static void main() throws IOException, InterruptedException {
     Property property = new Property(new Properties());
     LinkedList serverList = new LinkedList();
     for(Server s : property.prepareServers()) {
         serverList.add(s);
     }
     LoadBalancers loadBalancer = new LoadBalancers(serverList, property);
-    ExecutorService executor = Executors.newFixedThreadPool(7);
     Client client = new Client("a");
-    ClientHandler clientHandler = new ClientHandler(client);
-    executor.execute(loadBalancer);
-    executor.execute(clientHandler);
-    ServerHandler serverHandler = new ServerHandler(serverList.getHead().getServer(), new Socket(client.getHOST(), client.getLOAD_BALANCER_PORT()));
-    ServerHandler serverHandler1 = new ServerHandler(serverList.getHead().getServer(), new Socket(client.getHOST(), client.getLOAD_BALANCER_PORT()));
-    executor.execute(serverHandler);
-    executor.execute(serverHandler1);
-    executor.shutdown();
+    Thread[] threads = new Thread[7];
+    threads[0] = new Thread(loadBalancer);
+    threads[0].start();
+    threads[1] = new Thread(new ServerHandler(serverList.getHead().getServer(), new Socket(client.getHOST(), serverList.getHead().getServer().getServerSocket().getLocalPort())));
+    threads[1].start();
+
+    threads[2] = new Thread(new ClientHandler(client));
+    threads[2].start();
+    threads[2].join();
+
 }
