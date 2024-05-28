@@ -13,12 +13,8 @@ public class HandleTakeSocket implements Runnable{
 
     @Override
     public void run() {
-        while (true){
-            try {
-                server.addSocket(socket);
-            }catch (InterruptedException e){
-                System.out.println(e.getMessage());
-            }
-        }
+//        while (true){
+//            server.addSocket(socket);
+//        }
     }
 }

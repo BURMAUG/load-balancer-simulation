@@ -21,27 +21,23 @@ public class ServerHandler implements Runnable{
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()){
+        while (!Thread.currentThread().isInterrupted()) {
             lock.lock();
-            try{
-                ServerSocket serverSocket =  server.getServerSocket();
-                socket = serverSocket.accept();
+            try {
+//                ServerSocket serverSocket =  server.getServerSocket();
+//                socket = serverSocket.accept();
                 server.addSocket(socket); // what should be here
                 DataInputStream inputStream = new DataInputStream(socket.getInputStream());
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-                outputStream.writeDouble(inputStream.readDouble() /2);
+                outputStream.writeDouble(inputStream.readDouble() / 2);
                 System.out.println("here");
                 System.out.println(STR."+++++++\{server.isHealthy()}");
-
-                Socket socket1 = server.takeSocket();
-                socket1.close();
                 System.out.println();
             } catch (IOException e) {
                 System.out.println(STR."ServerHandler \{e.getMessage()}");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
+                lock.unlock();
             }
-            lock.unlock();
         }
     }
 }

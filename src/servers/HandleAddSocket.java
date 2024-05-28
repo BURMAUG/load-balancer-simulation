@@ -14,12 +14,12 @@ public class HandleAddSocket implements Runnable{
 
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()){
-            try {
-                server.addSocket(socket);
-            } catch (InterruptedException e) {
-                System.out.println(STR."Error from handleAddSocket class \{e.getMessage()}");
-            }
-        }
+//        while(!Thread.currentThread().isInterrupted()){
+//            try {
+//                server.addSocket(socket);
+//            } catch (InterruptedException e) {
+//                System.out.println(STR."Error from handleAddSocket class \{e.getMessage()}");
+//            }
+//        }
     }
 }

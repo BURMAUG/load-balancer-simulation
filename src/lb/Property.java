@@ -19,6 +19,7 @@ public class Property {
     private void loadProps() {
         try {
             properties.load(new FileInputStream("src/application.properties"));
+            System.out.println("Property Loaded!");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -26,9 +27,9 @@ public class Property {
 
    public ArrayList<Server> prepareServers() throws IOException {
         return new ArrayList<>( Arrays.asList(
-//                new Server(Integer.parseInt( properties.getProperty("server.one.id")), properties.get("server.one.name").toString(),  Integer.parseInt(properties.getProperty("server.one.port"))),
-//                new Server(Integer.parseInt(properties.getProperty("server.two.id")), properties.get("server.two.name").toString(), Integer.parseInt(properties.getProperty("server.two.port"))),
-//                new Server(Integer.parseInt(properties.getProperty("server.three.id")), properties.get("server.three.name").toString(), Integer.parseInt(properties.getProperty("server.three.port")))
+                new Server(Integer.parseInt( properties.getProperty("server.one.id")), properties.get("server.one.name").toString(),  Integer.parseInt(properties.getProperty("server.one.port"))),
+                new Server(Integer.parseInt(properties.getProperty("server.two.id")), properties.get("server.two.name").toString(), Integer.parseInt(properties.getProperty("server.two.port"))),
+                new Server(Integer.parseInt(properties.getProperty("server.three.id")), properties.get("server.three.name").toString(), Integer.parseInt(properties.getProperty("server.three.port")))
         ));
     }
     /**
