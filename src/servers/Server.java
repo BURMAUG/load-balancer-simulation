@@ -70,13 +70,22 @@ public class Server {
         return failureRate;
     }
 
+    public void increaseFailureRateCount(){
+
+    }
+
     public double successRate(){
         return successRate;
+    }
+
+    public void increaseSuccessRateCount(){
+
     }
 
     public int currentCapacity(){
         return currentQueueCapacity;
     }
+
     /**
      *  Removes the socket that is ready for data transfers.
      * @return Socket
