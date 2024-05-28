@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class LoadBalancers implements Runnable{
     private LinkedList servers;
-    LinkedList.Node cur;
+    private LinkedList.Node cur;
     private final Property property;
     // I am  thinking I should also have a queue here too like 15 socket
 
@@ -28,10 +28,11 @@ public class LoadBalancers implements Runnable{
 
 
     public synchronized Server roundRobinRouting() {
-        if (cur.getNext() == null){
-            cur = servers.getHead();
+        if (cur.getNext() != null){
             return cur.getServer();
         }
+        cur = servers.getHead();
+        System.out.println("Not Null");
         return cur.getServer(); // I feel like problems may arise here.
     }
 
@@ -64,6 +65,7 @@ public class LoadBalancers implements Runnable{
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
                 outputStream.writeInt(server.getServerSocket().getLocalPort());
                 System.out.println(STR."sent \{server.getServerSocket().getLocalPort()}");
+                System.out.println(STR."Server Details \{server.toString()}");
             } catch (IOException _) {
             }
         }

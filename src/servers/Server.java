@@ -4,8 +4,6 @@ package servers;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,7 +15,7 @@ public class Server {
     private final int port;
     private final ServerSocket serverSocket;
     private final Lock lock = new ReentrantLock();
-    private final Map<Integer, Socket> socketMap = new HashMap<>(); // port associated with the server
+//    private final Map<Integer, Socket> socketMap = new HashMap<>(); // port associated with the server
     private final Condition condition = lock.newCondition();
 
     public Server(int serverID, String serverName, int port) throws IOException {
@@ -36,11 +34,11 @@ public class Server {
     // Metrics
     private long totalResponseTime;
     private long averageResponseTime;
-    private static volatile boolean isHealthy = true; // if working queue is less than 70% then it's in good health
+    private static boolean isHealthy = true; // if working queue is less than 70% then it's in good health
     private static volatile double failureRate = 0.0; // in percentages
     private static volatile double successRate = 0.0;
 
-    private volatile int currentQueueCapacity = socketMap.size();
+//    private volatile int currentQueueCapacity = socketMap.size();
 
     /**
      * ServerSocket this should return a given the appropriate serverSocket that needs to work
@@ -82,9 +80,9 @@ public class Server {
 
     }
 
-    public int currentCapacity(){
-        return currentQueueCapacity;
-    }
+//    public int currentCapacity(){
+//        return currentQueueCapacity;
+//    }
 
     /**
      *  Removes the socket that is ready for data transfers.
@@ -94,6 +92,9 @@ public class Server {
         return new Socket();
     }
 
+    public void handleDataCommunication(){
+
+    }
     @Override
     public String toString() {
         return STR."Server{serverName='\{serverName}\{'\''}, serverID=\{serverID}, port=\{port}, serverSocket=\{serverSocket}\{'}'}";

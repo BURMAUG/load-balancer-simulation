@@ -24,8 +24,8 @@ public class ServerHandler implements Runnable{
         while (!Thread.currentThread().isInterrupted()) {
             lock.lock();
             try {
-//                ServerSocket serverSocket =  server.getServerSocket();
-//                socket = serverSocket.accept();
+                ServerSocket serverSocket =  server.getServerSocket();
+                socket = serverSocket.accept();
                 server.addSocket(socket); // what should be here
                 DataInputStream inputStream = new DataInputStream(socket.getInputStream());
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());

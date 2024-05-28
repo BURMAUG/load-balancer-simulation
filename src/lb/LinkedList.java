@@ -25,7 +25,8 @@ public class LinkedList {
     }
 
     public static class Node{
-        private Server server;
+
+        private final Server server;
         private Node next;
 
         public Node(Server server) {
