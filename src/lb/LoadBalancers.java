@@ -31,7 +31,7 @@ public class LoadBalancers implements Runnable{
 
     public synchronized Server roundRobinRouting() {
 //        lock.unlock();
-        if(cur.getNext() == null)
+        if(cur == null)
             cur = servers.getHead();
         LinkedList.Node c = cur;
         cur = cur.getNext();
