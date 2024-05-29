@@ -6,12 +6,16 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class LoadBalancers implements Runnable{
     private LinkedList servers;
-    private LinkedList.Node cur;
+    private static LinkedList.Node cur;
     private final Property property;
+    private final Lock lock = new ReentrantLock();
     // I am  thinking I should also have a queue here too like 15 socket
+
 
     public LoadBalancers(Property property){
         Properties properties = new Properties();
@@ -26,11 +30,12 @@ public class LoadBalancers implements Runnable{
     }
 
     public synchronized Server roundRobinRouting() {
+//        lock.unlock();
         if(cur.getNext() == null)
             cur = servers.getHead();
         LinkedList.Node c = cur;
         cur = cur.getNext();
-
+//        lock.unlock();
         return c.getServer();
     }
 
@@ -65,7 +70,12 @@ public class LoadBalancers implements Runnable{
                 System.out.println(STR."sent \{server.getServerSocket().getLocalPort()}");
                 System.out.println(STR."Server Details \{server.toString()}");
                 System.out.println();
-            } catch (IOException _) {
+            } catch (IOException e) {
+                try {
+                    throw new IOException(e.getCause());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
     }

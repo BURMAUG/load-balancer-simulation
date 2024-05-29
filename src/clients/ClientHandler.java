@@ -42,8 +42,10 @@ public class ClientHandler extends Thread {
                 }
             } catch (IOException e) {
                 System.out.println(STR."Error from ClientHandler \{e.getMessage()}");
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
             }
-            lock.unlock();
         }
     }
 }

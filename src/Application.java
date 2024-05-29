@@ -9,24 +9,34 @@ import servers.ServerHandler;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Properties;
-;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public static void main() throws IOException, InterruptedException {
     Property property = new Property(new Properties());
     LinkedList serverList = new LinkedList();
-    for(Server s : property.prepareServers()) {
+
+    for (Server s : property.prepareServers()) {
         serverList.add(s);
     }
-    LoadBalancers loadBalancer = new LoadBalancers(serverList, property);
-    Client client = new Client("a");
-    Thread[] threads = new Thread[7];
-    threads[0] = new Thread(loadBalancer);
-    threads[0].start();
-    threads[1] = new Thread(new ServerHandler(serverList.getHead().getServer(), new Socket(client.getHOST(), serverList.getHead().getServer().getServerSocket().getLocalPort())));
-    threads[1].start();
 
-    threads[2] = new Thread(new ClientHandler(client));
-    threads[2].start();
-    threads[2].join();
+    LoadBalancers loadBalancer = new LoadBalancers(serverList, property);
+    ExecutorService ex = Executors.newFixedThreadPool(14);
+
+    ex.execute(loadBalancer);
+    Client client = new Client("a");
+    LinkedList.Node cur = serverList.getHead();
+
+    while (cur != null) {
+        ex.execute(new ServerHandler(cur.getServer(), new Socket(client.getHOST(), client.getLOAD_BALANCER_PORT())));
+        cur = cur.getNext();
+    }
+
+    ex.execute(new ClientHandler(client));
+    ex.shutdown();
+
+    while (!ex.isTerminated()) {
+        Thread.sleep(100);  // Check periodically if the threads have finished
+    }
 
 }
