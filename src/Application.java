@@ -21,7 +21,7 @@ public static void main() throws IOException, InterruptedException {
     }
 
     LoadBalancers loadBalancer = new LoadBalancers(serverList, property);
-    ExecutorService ex = Executors.newFixedThreadPool(14);
+    ExecutorService ex = Executors.newCachedThreadPool();
 
     ex.execute(loadBalancer);
     Client client = new Client("a");
@@ -38,5 +38,4 @@ public static void main() throws IOException, InterruptedException {
     while (!ex.isTerminated()) {
         Thread.sleep(100);  // Check periodically if the threads have finished
     }
-
 }
