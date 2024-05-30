@@ -36,9 +36,6 @@ public class ClientHandler extends Thread {
                     // Radius of the given circles diameter
                     DataInputStream radiusInputStream = new DataInputStream(ss.getInputStream());
                     System.out.println(STR."\{i+1}. The diameter of a circle \{diameter} has a radius \{radiusInputStream.readDouble()}");
-                    Thread.sleep(2);
-                } catch (InterruptedException _) {
-
                 }
             } catch (IOException e) {
                 System.out.println(STR."Error from ClientHandler \{e.getMessage()}");
