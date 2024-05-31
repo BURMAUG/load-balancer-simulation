@@ -1,4 +1,4 @@
-# Simple Load Balancer Simulation 
+# Simple Distributed Load Balancer Simulation 
 
 ### Introduction
 This is a simulations of the implementation of the software Load Balancer that routes TCP network calls to different
